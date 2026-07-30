@@ -25,7 +25,7 @@ export const ticketsTable= pgTable("tickets",{
    priority: integer("priority"),
    created_at: timestamp("created_at").defaultNow(),
    updated_at: timestamp("updated_at"),
-   idempotency_key: uuid("idempotency_key").defaultRandom().notNull()
+   idempotency_key: uuid("idempotency_key").unique().notNull()
 });
 
 export const ai_runsTable= pgTable("ai_runs",{

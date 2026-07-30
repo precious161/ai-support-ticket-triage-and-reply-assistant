@@ -3,6 +3,9 @@ import { config } from "./lib/env.js";
 import { validatorCompiler, serializerCompiler} from "fastify-type-provider-zod";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 
+// Webhook Routes
+import { webhookRoutes } from "./routes/webhook.js";
+
 const getLoggerConfig = () =>{
   if(config.node_env === "development"){
     return{
@@ -27,6 +30,10 @@ export const buildApp = async()=>{
   app.setSerializerCompiler(serializerCompiler);
 
   const appWithZod= app.withTypeProvider<ZodTypeProvider>();
+
+// Webhook Routes
+await appWithZod.register(webhookRoutes);
+
 
 
   return appWithZod;

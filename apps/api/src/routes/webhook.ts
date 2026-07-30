@@ -13,7 +13,7 @@ const ticketSchema= z.object({
 });
 
 const headerSchema= z.object({
-  "idempotency-key": z.string().min(1)
+  "idempotency-key": z.string().uuid()
 })
 
 export const webhookRoutes: FastifyPluginAsyncZod = async (app)=>{
@@ -32,7 +32,7 @@ export const webhookRoutes: FastifyPluginAsyncZod = async (app)=>{
 
      if(existingTicket){
       return reply.status(200).send({
-        ticket_id: existingTicket.id,
+        ticketId: existingTicket.id,
         status: "queued"
       });
      }
