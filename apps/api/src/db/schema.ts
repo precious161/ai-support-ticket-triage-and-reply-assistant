@@ -1,7 +1,7 @@
 import { pgEnum, integer, pgTable, varchar,text, uuid, timestamp }  from "drizzle-orm/pg-core";
 
 export const ticketsStatus= pgEnum("tickets_status",[
-   "QUEUED",
+   "NEW",
    "PROCESSING",
    "PENDING_REVIEW",
    "APPROVED",
@@ -21,10 +21,11 @@ export const ticketsTable= pgTable("tickets",{
    title: varchar("title",{length: 255}).notNull(),
    description: text("description"),
    email: varchar("email",{ length: 255}).notNull(),
-   status: ticketsStatus("status").default("QUEUED").notNull(),
+   status: ticketsStatus("status").default("NEW").notNull(),
    priority: integer("priority"),
    created_at: timestamp("created_at").defaultNow(),
-   updated_at: timestamp("updated_at")
+   updated_at: timestamp("updated_at"),
+   idempotency_key: uuid("idempotency_key").defaultRandom().notNull()
 });
 
 export const ai_runsTable= pgTable("ai_runs",{
