@@ -5,7 +5,8 @@ dotenv.config();
 export const config={
   port: Number(process.env.PORT) ,
   node_env: process.env.NODE_ENV,
-  db_url: process.env.DATABASE_URL
+  db_url: process.env.DATABASE_URL,
+  redis_url: process.env.REDIS_URL
 }
 
 if(!config.port){

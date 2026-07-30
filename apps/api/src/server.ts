@@ -1,5 +1,5 @@
 import { buildApp } from "./app.js";
-import { config } from "./config/env.js";
+import { config } from "./lib/env.js";
 
 const port= config.port;
 const host= '0.0.0.0';
@@ -11,9 +11,9 @@ const start= async()=>{
   try{
     await app.listen({port,host});
   }
-  catch(e:any){
+  catch(err){
 
-    app.log.error(e.message);
+    app.log.error(err);
     process.exit(1);
   }
 }

@@ -1,26 +1,34 @@
-import fastify from "fastify";
-import { config } from "./config/env.js";
-import pingRoutes from "./routes/ping.js";
+import fastify, { type FastifyInstance } from "fastify";
+import { config } from "./lib/env.js";
+import { validatorCompiler, serializerCompiler} from "fastify-type-provider-zod";
+import type { ZodTypeProvider } from "fastify-type-provider-zod";
 
-let loggerOptions: any= true;
-
-if(config.node_env === "development"){
-  loggerOptions={
-    transport: { target: "pino-pretty"},
-    options:{
-      colorize: true
+const getLoggerConfig = () =>{
+  if(config.node_env === "development"){
+    return{
+      transport:{
+        target: "pino-pretty",
+        options:{
+          colorize: true,
+          translateTime: "HH:MM:ss Z",
+          ignore: "pid,hostname"
+        }
+      }
     }
   }
-}
-else if(config.node_env === "production"){
-  loggerOptions= true;
+  return true;
 }
 
 export const buildApp = async()=>{
 
-  const app = fastify({logger: loggerOptions});
+  const app = fastify({logger: getLoggerConfig()});
 
-  app.register(pingRoutes);
-  return app;
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
+
+  const appWithZod= app.withTypeProvider<ZodTypeProvider>();
+
+
+  return appWithZod;
 
 }
